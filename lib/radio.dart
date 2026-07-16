@@ -8,68 +8,73 @@ class RadioPage extends StatefulWidget {
 }
 
 class _RadioPageState extends State<RadioPage> {
-  var _selectedValue = "Option 1";
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: [
-          RadioListTile(
-            title: Text('Option 1'),
-            value: 'Option 1',
-            groupValue: _selectedValue,
-            onChanged: (String? value) {
-              setState(() {
-                _selectedValue = value!;
-              });
-            },
-          ),
-          RadioListTile(
-            title: Text('Option 2'),
-            value: 'Option 2',
-            groupValue: _selectedValue,
-            onChanged: (value) {
-              setState(() {
-                _selectedValue = value!;
-              });
-            },
-          ),
-        ],
-      ),
-
-      floatingActionButton: FloatingActionButton(onPressed: (){
-         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NextPage(selectedValue: _selectedValue),
-            ),
-          );
-        },
-         child: Icon(Icons.arrow_forward),
-      ),
-    );
-  }
-}
-
-
-
-
-class NextPage extends StatelessWidget {
-  final String selectedValue;
-
-  NextPage({required this.selectedValue});
+  String _selectedValue = "Option 1";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Next Page'),
+        title: const Text("Radio Example"),
+      ),
+      body: RadioGroup<String>(
+        groupValue: _selectedValue,
+        onChanged: (String? value) {
+          if (value != null) {
+            setState(() {
+              _selectedValue = value;
+            });
+          }
+        },
+        child: ListView(
+          children: const [
+            RadioListTile<String>(
+              title: Text("Option 1"),
+              value: "Option 1",
+            ),
+            RadioListTile<String>(
+              title: Text("Option 2"),
+              value: "Option 2",
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  NextPage(selectedValue: _selectedValue),
+            ),
+          );
+        },
+        child: const Icon(Icons.arrow_forward),
+      ),
+    );
+  }
+}
+
+class NextPage extends StatelessWidget {
+  final String selectedValue;
+
+  const NextPage({
+    super.key,
+    required this.selectedValue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Next Page"),
       ),
       body: Center(
         child: Text(
-          'Selected Value: $selectedValue',
-          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+          "Selected Value: $selectedValue",
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
